@@ -57,15 +57,20 @@ def split_group(source):
     groups = []
     while tiles:
         box = tiles[-1].box_world
-        group = list(filter(lambda tile: box.contains(tile.box_world), tiles))
+        group = []
+        rest = []
+        for tile in tiles:
+            if box.contains(tile.box_world):
+                group.append(tile)
+            else:
+                rest.append(tile)
+        # group = list(filter(lambda tile: box.contains(tile.box_world), tiles))
         tile = Tile().add_child(group.pop())
         if group:
             tile.add_children(split_group(group))
 
         groups.append(tile)
-
-        tiles = list(
-            filter(lambda tile: not box.contains(tile.box_world), tiles))
+        tiles = rest
 
     return groups
 
@@ -76,12 +81,23 @@ def gltf_to_tileset(fin, fout, measure: Measure = Measure.METER, up_direction: A
     Path(fout).parent.mkdir(parents=True, exist_ok=True)
     gltf_slicer = Slicer(gltf, buffers=buffers)
     Tile.measure = measure
-    tiles = list(map(lambda id: Tile(content_id=id, instance_box=gltf_slicer.get_bounding_box(
-        id), instances_matrices=gltf_slicer.get_matrices(id), matrix=Matrix4(), gltf=gltf_slicer.slice_mesh(id).as_bytes(), extras=gltf_slicer.get_extras(id)), range(gltf_slicer.meshes_count)))
-    tiles.sort(key=lambda tile: tile.box_world.diagonal)
+    tiles = list(map(
+        lambda id: Tile(
+            content_id=id,
+            instance_box=gltf_slicer.get_bounding_box(id),
+            instances_matrices=gltf_slicer.get_matrices(id),
+            matrix=Matrix4(),
+            gltf=gltf_slicer.slice_mesh(id).as_bytes(),
+            extras=gltf_slicer.get_extras(id)
+        ),
+        range(gltf_slicer.meshes_count)
+    ))
+    print('meshes count:', gltf_slicer.meshes_count)
+
+    # 生成 tileset.json
+    tiles.sort(key=lambda tile: tile.box_world.diagonal) # 按对角线长度排序
     grouped_tiles = split_group(tiles)
     root = build_bvh(grouped_tiles)
-
     root.refine = "ADD"
     tileset = Tileset(root)
     with open(fout, "w") as f:

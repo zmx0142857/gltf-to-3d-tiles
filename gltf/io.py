@@ -13,7 +13,8 @@ def read_gltf(fin):
     with open(fin, encoding='utf-8') as f:
         data = json.load(f)
         if hasattr(data, "extensionsUsed"):
-            Element.extensions = data["extensionsUsed"];
+            for key in data["extensionsUsed"]:
+                Element.extensions.add(key)
         # gltf = json.load(f, object_hook=lambda d: Element(**d))
         gltf = Element(**data)
 

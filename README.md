@@ -11,6 +11,10 @@ I am writting articles to explain code snippets and methodology used at this rep
 
 ***
 
+## Requirements
+
+python >= 3.7 <= 3.10
+
 ## Usage
 
 ```text
@@ -73,14 +77,16 @@ Usage: main.py tileset [OPTIONS] FIN [FOUT]
 
 Arguments:
   FIN     input gltf path  [required]
-  [FOUT]  Optional output glb path (defaults to the path of the input file)
+  [FOUT]  Optional output tileset.json path (defaults to the path of the input
+          file)
 
 Options:
-  --measure [meter|foot]  measure of attributes in gltf buffers  [default:
-                          Measure.METER]
-  --up [y|z]              up direction used in gltf coordinate system
-                          [default: Axis.Y]
-  --help                  Show this message and exit.
+  --measure [meter|foot|millimeter]
+                                  measure of attributes in gltf buffers
+                                  [default: Measure.METER]
+  --up [y|z]                      up direction used in gltf coordinate system
+                                  [default: Axis.Y]
+  --help                          Show this message and exit.
 ```
 
 ***

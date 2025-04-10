@@ -19,10 +19,8 @@ def tileset(
         fout: str = typer.
     Argument(
         None,
-        help="Optional output glb path (defaults to the path of the input file)"
-            ),
-        measure: Measure = typer.Option(
-            Measure.METER, help="measure of attributes in gltf buffers"),
+        help="Optional output tileset.json path (defaults to the path of the input file)"),
+        measure: Measure = typer.Option(Measure.METER, help="measure of attributes in gltf buffers"),
         up_direction: Axis = typer.Option(Axis.Y, "--up", help="up direction used in gltf coordinate system")):
     """split gltf model to 3d tiles"""
     start = timeit.default_timer()

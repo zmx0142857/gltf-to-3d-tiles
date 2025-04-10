@@ -4,12 +4,13 @@ from functools import cached_property
 from utils import Box3, Matrix4
 from enum import Enum
 
-FOOT_TO_METER_MULTIPLIER = 0.3084
-
+FOOT_TO_METER_MULTIPLIER = 0.3048
+MILLIMETER_TO_METER_MULTIPLIER = 0.001
 
 class Measure(str, Enum):
     METER = "meter"
     FOOT = "foot"
+    MILLIMETER = "millimeter"
 
 
 class Tile:
@@ -112,6 +113,8 @@ class Tile:
 
         if Tile.measure is Measure.FOOT:
             return self.__instance_box.diagonal * FOOT_TO_METER_MULTIPLIER
+        elif Tile.measure is Measure.MILLIMETER:
+            return self.__instance_box.diagonal * MILLIMETER_TO_METER_MULTIPLIER
 
         return self.__instance_box.diagonal
 

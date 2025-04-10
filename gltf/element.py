@@ -2,10 +2,13 @@ from typing import overload
 import utils
 
 
+# TODO: 不要转换 case
 class Element:
-    extensions = []
+    extensions = set()
 
     def __init(self, camel_case=True, **kwargs) -> None:
+        for key in kwargs.get("extensionsUsed", []):
+            Element.extensions.add(key)
         for key, value in kwargs.items():
             if camel_case and key not in Element.extensions:
                 key = utils.camel_to_snake(key)
