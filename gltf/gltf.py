@@ -4,8 +4,19 @@ import utils
 from .element import Element
 from enum import Enum
 
-Z_UP_TO_Y_UP_MATRIX = [1.0, 0.0,  0.0, 0.0, 0.0,
-                       0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,  0.0, 1.0]
+MAT_Y = [
+    0., 0., 1., 0.,
+    1., 0., 0., 0.,
+    0., 1., 0., 0.,
+    0., 0., 0., 1.
+]
+
+MAT_Z = [
+    0., 1., 0., 0.,
+    1., 0., 0., 0.,
+    0., 0., -1., 0.,
+    0., 0., 0., 1.
+]
 
 
 class Axis(str, Enum):
@@ -17,7 +28,6 @@ class Gltf(Element):
     ASSET = {
         "generator": "gltf generator",
         "version": "2.0",
-        "copyright": "2019 (p) jason"
     }
     SCENES = [Element(nodes=[0], name="Scene")]
     up_direction = Axis.Y
@@ -28,8 +38,10 @@ class Gltf(Element):
         self.asset = Gltf.ASSET
         self.scenes = Gltf.SCENES
         self.scene = 0
-        self.nodes = [Element(mesh=0, matrix=Z_UP_TO_Y_UP_MATRIX)
-                      ] if Gltf.up_direction is Axis.Y else [Element(mesh=0)]
+        self.nodes = [Element(
+            mesh=0,
+            matrix=MAT_Y if Gltf.up_direction is Axis.Y else MAT_Z
+        )]
 
         super().__init__(False, **kwargs)
 

@@ -9,8 +9,6 @@ I am writting articles to explain code snippets and methodology used at this rep
 3. [Manipulate JSON with Python Dynamic Object](https://xuzhusheng.medium.com/manipulate-json-with-python-dynamic-object-fe885394d17f)
 4. [Converting between Snake Case and Camel Case](https://xuzhusheng.medium.com/converting-between-naming-convention-with-python-2d91032bd0dc)
 
-***
-
 ## Requirements
 
 python >= 3.7 <= 3.10
@@ -88,16 +86,3 @@ Options:
                                   [default: Axis.Y]
   --help                          Show this message and exit.
 ```
-
-***
-## Support:
-<p>
-  <a href="https://www.buymeacoffee.com/jason.xu"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="jason.xu" /></a>
-  <a href="https://ko-fi.com/jasonxu"> <img align="left" src="https://cdn.ko-fi.com/cdn/kofi3.png?v=3" height="50" width="210" alt="jasonxu" /></a>
-</p>
-<br><br>
-<!--
-## Support
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/jason.xu)
-&emsp; [![ko-fi](https://cdn.ko-fi.com/cdn/kofi3.png?v=3)](https://ko-fi.com/I2I5VT4LU)
--->

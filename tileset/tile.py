@@ -3,6 +3,7 @@ from .i3dm import I3dm
 from functools import cached_property
 from utils import Box3, Matrix4
 from enum import Enum
+from gltf import Gltf, Axis
 
 FOOT_TO_METER_MULTIPLIER = 0.3048
 MILLIMETER_TO_METER_MULTIPLIER = 0.001
@@ -65,8 +66,8 @@ class Tile:
 
     @property
     def __content_box(self):
-        box = Box3()
-        if 1 < len(self.__content_matrices):
+        if self.__content_matrices is not None and 1 < len(self.__content_matrices):
+            box = Box3()
             for matrix in self.__content_matrices:
                 box.union(
                     self.__instance_box.clone().apply_matrix4(matrix.matrix))
@@ -100,7 +101,15 @@ class Tile:
 
     @cached_property
     def box_world(self):
-        return self.box.clone().apply_matrix4(self.matrix.matrix)
+        debug = self.__content_id == 2
+        res = self.box.clone().apply_matrix4(self.matrix.matrix, debug)
+        # if debug:
+        #     print(2, self.box.list)
+        #     print(2, self.__matrix.matrix)
+        #     print(2, self.__content_matrix.matrix)
+        #     print(2, self.matrix.matrix)
+        #     print(2, res.list)
+        return res
 
     @property
     def centroid_world(self):
@@ -121,12 +130,37 @@ class Tile:
     @property
     def dict(self):
         ret = {
-            "boundingVolume": {"box": self.box.list},
             "geometricError": self.geometric_error,
-            "refine": self.refine}
+            "refine": self.refine
+        }
+        box = self.box.list
+        if Gltf.up_direction is Axis.Z:
+            tmp = box[2]
+            box[2] = box[1]
+            box[1] = box[0]
+            box[0] = tmp
+            if self.__content_id is None:
+                tmp = box[11]
+                box[11] = box[7]
+                box[7] = box[3]
+                box[3] = tmp
+            else:
+                tmp = box[3]
+                box[3] = box[7]
+                box[7] = box[11]
+                box[11] = tmp
+        ret["boundingVolume"] = {"box": box}
 
         if not self.matrix.is_identity:
             ret["transform"] = self.matrix.list
+            if Gltf.up_direction is Axis.Z:
+                t = ret["transform"]
+                ret["transform"] = [
+                    t[9], t[8], t[10], t[11],
+                    t[5], t[4], t[6], t[7],
+                    t[1], t[0], t[2], t[3],
+                    t[14], t[12], t[13], t[15]
+                ]
 
         if self.__content_id is not None:
             ret["content"] = self.content.dict
